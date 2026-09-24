@@ -47,9 +47,8 @@ meson test -C build --print-errorlogs
 ```
 
 Meson 1.8 or newer, a C compiler, Ninja, and Bash are required. The Nix recipe is
-`package.nix`. Once this repository has a published immutable revision,
-`nixpkgs-personal` can fetch it and call that recipe. The repository has no
-remote yet.
+`package.nix`. [`nixpkgs-personal`](https://github.com/nix-forge/nixpkgs-personal)
+fetches a pinned revision of this repository and calls that recipe.
 
 Run the complete local quality suite, including C static analysis, release and
 sanitizer tests, shell checks, format checks, and ELF hardening checks, with:
@@ -67,5 +66,8 @@ nix flake check
 
 Security and release expectations are documented in [SECURITY.md](SECURITY.md),
 [SUPPORT.md](SUPPORT.md), and [security and release process](docs/security-and-releases.md).
-The project has no official releases and does not claim an OSPS Baseline level,
-OpenSSF Best Practices passing badge, or SLSA Build level yet.
+The [source releases](https://github.com/IanHollow/steam-cef-scale-override/releases) provide
+versioned archives, checksums, and provenance. The first release is `v1.0.0`.
+There is no OSPS Baseline level or OpenSSF Best Practices passing
+claim for this repository. SLSA claims, if any, apply only to verified
+release archives, not to Nix builds or the whole repository.
