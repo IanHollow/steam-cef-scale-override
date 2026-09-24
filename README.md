@@ -67,7 +67,7 @@ nix flake check
 Security and release expectations are documented in [SECURITY.md](SECURITY.md),
 [SUPPORT.md](SUPPORT.md), and [security and release process](docs/security-and-releases.md).
 The [source releases](https://github.com/IanHollow/steam-cef-scale-override/releases) provide
-versioned archives, checksums, and provenance. The first release is `v1.0.0`.
+versioned archives, checksums, and provenance. The first release is `v1.0.1`.
 There is no OSPS Baseline level or OpenSSF Best Practices passing
 claim for this repository. SLSA claims, if any, apply only to verified
 release archives, not to Nix builds or the whole repository.

@@ -1,7 +1,7 @@
 project(
   'steam-cef-scale-override',
   'c',
-  version: '1.0.0',
+  version: '1.0.1',
   meson_version: '>=1.8.0',
   default_options: [
     'b_ndebug=true',
