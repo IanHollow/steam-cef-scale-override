@@ -1,0 +1,52 @@
+# steam-cef-scale-override
+
+An opt-in `LD_PRELOAD` interposer for the Steam desktop client's CEF UI. It
+calls Steam's exported `cef_set_force_device_scale_factor` immediately after a
+successful `cef_initialize`, allowing Steam to render sharp text while a
+Wayland compositor leaves XWayland buffers unscaled.
+
+The library is deliberately inert unless all of these conditions hold:
+
+- the executable basename is exactly `steamwebhelper`;
+- `STEAM_SCALE_FACTOR` is present and is a finite number from `0.25` to `8.0`;
+- CEF initialized successfully; and
+- the Steam-provided scale function is available.
+
+This is a temporary compatibility package, not an upstream Steam API. Remove
+it when Valve's documented `STEAM_FORCE_DESKTOPUI_SCALING` or
+`-forcedesktopscaling` path works again.
+
+The implementation is derived from
+[`steam-hidpi-shim`](https://github.com/katerinakosac51-creator/steam-hidpi-shim),
+commit `f6651b1d6e85800885ea2b251ffc37c4e68df7e4`, under the included MIT
+license. This version narrows process scope, removes the unnecessary
+`cef_execute_process` hook and constructor, validates the complete scale
+string, fails open, enables linker hardening, and adds behavioral tests.
+
+Meson defines the library, mock targets, installation, and tests. The Nixpkgs
+Meson and Ninja hooks provide an offline configure step, the Nix store prefix,
+and build parallelism from `NIX_BUILD_CORES`. Package checks run the mock CEF
+scenarios against the release library through `LD_PRELOAD` and against a separate
+ASan/UBSan Meson build. The sanitizer executable, mock library, and interposer are
+all instrumented. The sanitizer executable links the interposer before the mock
+CEF library so the sanitizer runtime loads first.
+Checks cover process scoping, valid boundary values, absent and malformed scales,
+and initialization failure. Sanitizer diagnostics fail the build; only the
+release library is installed.
+
+Installed-library checks require ELF64, the interposer export, GNU_RELRO,
+immediate binding, and an explicit non-executable GNU_STACK header. Production
+compiler and linker settings remain separate from sanitizer instrumentation.
+
+## Build and test
+
+```sh
+meson setup build -Dtests=true
+meson compile -C build
+meson test -C build --print-errorlogs
+```
+
+Meson 1.8 or newer, a C compiler, Ninja, and Bash are required. The Nix recipe is
+`package.nix`. Once this repository has a published immutable revision,
+`nixpkgs-personal` can fetch it and call that recipe. The repository has no
+remote yet.

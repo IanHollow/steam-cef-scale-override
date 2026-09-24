@@ -1,0 +1,18 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build python3-venv
+      - run: |
+          python3 -m venv .venv
+          .venv/bin/pip install "meson>=1.8,<2" ninja
+          .venv/bin/meson setup build -Dtests=true
+          .venv/bin/meson compile -C build
+          .venv/bin/meson test -C build --print-errorlogs
