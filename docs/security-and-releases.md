@@ -1,20 +1,41 @@
 # Security and release process
 
-This project's review target is [OSPS Baseline version 2026.08.28](https://baseline.openssf.org/versions/2026-08-28). The baseline is a self-attested control set; this document records the process, not a certification. The independent human approval required by OSPS-QA-07.01 is not yet satisfied. No Level 3 claim or badge is authorized until every applicable control is checked with evidence.
+This project's review target is [OSPS Baseline version 2026.08.28][baseline].
+The baseline is a self-attested control set; this document records the process,
+not a certification. The independent human approval required by OSPS-QA-07.01
+is not yet satisfied. No Level 3 claim or badge is authorized until every
+applicable control is checked with evidence.
 
 ## Source and CI
 
-All changes enter through a pull request with tests and a DCO sign-off on each commit. CI runs the project's format, lint, type/static analysis, tests, and Nix flake checks on the supported platform. CodeQL and dependency review run on pull requests. Workflows use pinned actions, minimal job permissions, and no persisted checkout credentials. Maintainers review new dependencies, source changes, licenses, lockfile changes, and CI permissions before merging. Major behavior changes require an automated regression test. Tests run on each pull request and on `main`; see [CONTRIBUTING.md](../CONTRIBUTING.md) for local commands.
+All changes enter through a pull request with tests and a DCO sign-off on each
+commit. CI runs the project's format, lint, type/static analysis, tests, and Nix
+flake checks on the supported platform. CodeQL and dependency review run on
+pull requests. Workflows use pinned actions, minimal job permissions, and no
+persisted checkout credentials. Maintainers review new dependencies, source
+changes, licenses, lockfile changes, and CI permissions before merging. Major
+behavior changes require an automated regression test. Tests run on each pull
+request and on `main`; see [CONTRIBUTING.md](../CONTRIBUTING.md) for local
+commands.
 
 ## Secrets and dependencies
 
-Do not store credentials in source, issue text, logs, or CI artifacts. Prefer GitHub's short-lived OIDC credentials for external services. If a long-lived secret becomes necessary, store it only in GitHub Actions secrets with the narrowest scope, restrict its environment, rotate it after exposure or personnel changes, and remove unused grants. Pull request code never receives a privileged token. Dependabot tracks GitHub Actions and Nix inputs. New dependencies must have compatible licenses and no known unresolved low-or-higher severity finding; any exception needs a documented risk decision before merging. Existing findings are triaged before a release. A finding judged not to affect a release must have a VEX record with evidence.
+Do not store credentials in source, issue text, logs, or CI artifacts. Prefer
+GitHub's short-lived OIDC credentials for external services. If a long-lived
+secret becomes necessary, store it only in GitHub Actions secrets with the
+narrowest scope, restrict its environment, rotate it after exposure or
+personnel changes, and remove unused grants. Pull request code never receives
+a privileged token. Dependabot tracks GitHub Actions and Nix inputs. New
+dependencies must have compatible licenses and no known unresolved
+low-or-higher severity finding; any exception needs a documented risk decision
+before merging. Existing findings are triaged before a release. A finding
+judged not to affect a release must have a VEX record with evidence.
 
 ## Releases
 
-The `v1.0.0` release is a source archive, with no prebuilt application or shared
+The `v1.0.1` release is a source archive, with no prebuilt application or shared
 library. The tag must name a commit on protected `main`, match the version in
-`package.nix`, and include reviewed [release notes](releases/v1.0.0.md) with a
+`package.nix`, and include reviewed [release notes](releases/v1.0.1.md) with a
 changelog, supported platform, and support end date. Prebuilt macOS assets
 would also require a stable Apple signing identity, notarization, and a separate
 security review; a Nix-built package is not a general-purpose binary release.
@@ -42,17 +63,19 @@ GitHub-generated archives, or the repository as a whole. See the
 Download the release assets and check the archive's checksum and provenance:
 
 ```sh
-gh release download v1.0.0 --repo IanHollow/steam-cef-scale-override --dir release
+gh release download v1.0.1 --repo IanHollow/steam-cef-scale-override --dir release
 cd release
-sha256sum -c steam-cef-scale-override-v1.0.0.tar.gz.sha256
-gh attestation verify steam-cef-scale-override-v1.0.0.tar.gz \
+sha256sum -c steam-cef-scale-override-v1.0.1.tar.gz.sha256
+gh attestation verify steam-cef-scale-override-v1.0.1.tar.gz \
   --repo IanHollow/steam-cef-scale-override \
-  --bundle steam-cef-scale-override-v1.0.0.intoto.jsonl \
+  --bundle steam-cef-scale-override-v1.0.1.intoto.jsonl \
   --signer-workflow nix-forge/ci/.github/workflows/slsa-source-release.yml \
   --signer-digest bb1b39a9082f72dc6c7ce596103ce7a5e4d29b01 \
-  --source-ref refs/tags/v1.0.0
+  --source-ref refs/tags/v1.0.1
 ```
 
 The `release-manifest.txt` asset records the exact source commit and archive
 SHA-256. Compare those values with the tag and the checksum before building.
 For private vulnerability reports, use [SECURITY.md](../SECURITY.md).
+
+[baseline]: https://baseline.openssf.org/versions/2026-08-28
