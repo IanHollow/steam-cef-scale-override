@@ -58,3 +58,14 @@ sanitizer tests, shell checks, format checks, and ELF hardening checks, with:
 nix develop --command bash Scripts/check-quality.sh
 nix flake check
 ```
+
+## Project health
+
+[![CI](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/ci.yml/badge.svg)](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/codeql.yml/badge.svg)](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/IanHollow/steam-cef-scale-override/badge)](https://scorecard.dev/viewer/?uri=github.com/IanHollow/steam-cef-scale-override)
+
+Security and release expectations are documented in [SECURITY.md](SECURITY.md),
+[SUPPORT.md](SUPPORT.md), and [security and release process](docs/security-and-releases.md).
+The project has no official releases and does not claim an OSPS Baseline level,
+OpenSSF Best Practices passing badge, or SLSA Build level yet.

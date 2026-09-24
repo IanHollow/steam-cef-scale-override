@@ -1,0 +1,28 @@
+name: CodeQL
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '17 3 * * 2'
+  workflow_dispatch:
+permissions: {}
+jobs:
+  analyze:
+    name: codeql
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4.38.1
+        with:
+          languages: cpp
+          build-mode: manual
+      - uses: nix-forge/ci/actions/setup-nix@4f58fd74e91957fa257cb48e2fa2687e09689e2c # v2.8.0
+      - run: nix develop --command bash -c "meson setup build-codeql -Dtests=true && meson compile -C build-codeql"
+      - uses: github/codeql-action/analyze@1c5b675653bb5c22dbe9b12b556ec555138e09fd # v4.38.1
