@@ -12,7 +12,7 @@
     {
       packages.${system}.default = package;
       checks.${system}.package = package;
-      devShells.${system}.default = pkgs.mkShellNoCC {
+      devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           binutils
           clang-tools
