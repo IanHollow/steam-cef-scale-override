@@ -50,3 +50,11 @@ Meson 1.8 or newer, a C compiler, Ninja, and Bash are required. The Nix recipe i
 `package.nix`. Once this repository has a published immutable revision,
 `nixpkgs-personal` can fetch it and call that recipe. The repository has no
 remote yet.
+
+Run the complete local quality suite, including C static analysis, release and
+sanitizer tests, shell checks, format checks, and ELF hardening checks, with:
+
+```sh
+nix develop --command bash Scripts/check-quality.sh
+nix flake check
+```

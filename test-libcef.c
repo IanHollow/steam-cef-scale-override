@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-__attribute__((visibility("default"))) int cef_initialize(
-    const void *args, const void *settings, void *application, void *windows_sandbox_info);
+__attribute__((visibility("default"))) int cef_initialize(const void *args, const void *settings,
+                                                          void *application,
+                                                          void *windows_sandbox_info);
 __attribute__((visibility("default"))) void cef_set_force_device_scale_factor(double scale);
 
 static void append_event(const char *event) {
@@ -24,8 +25,9 @@ static void append_event(const char *event) {
   }
 }
 
-__attribute__((visibility("default"))) int cef_initialize(
-    const void *args, const void *settings, void *application, void *windows_sandbox_info) {
+__attribute__((visibility("default"))) int cef_initialize(const void *args, const void *settings,
+                                                          void *application,
+                                                          void *windows_sandbox_info) {
   (void)args;
   (void)settings;
   (void)application;

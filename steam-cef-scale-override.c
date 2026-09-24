@@ -24,8 +24,9 @@
 typedef int (*cef_initialize_fn)(const void *, const void *, void *, void *);
 typedef void (*cef_set_scale_fn)(double);
 
-__attribute__((visibility("default"))) int cef_initialize(
-    const void *args, const void *settings, void *application, void *windows_sandbox_info);
+__attribute__((visibility("default"))) int cef_initialize(const void *args, const void *settings,
+                                                          void *application,
+                                                          void *windows_sandbox_info);
 
 static bool debug_enabled(void) {
   const char *value = getenv("STEAM_SCALE_DEBUG");
@@ -82,8 +83,8 @@ static cef_initialize_fn find_real_initialize(void) {
   cef_initialize_fn function = NULL;
   void *symbol = dlsym(RTLD_NEXT, "cef_initialize");
 
-  _Static_assert(
-      sizeof(function) == sizeof(symbol), "dlsym pointer size differs from a CEF function pointer");
+  _Static_assert(sizeof(function) == sizeof(symbol),
+                 "dlsym pointer size differs from a CEF function pointer");
   (void)memcpy(&function, &symbol, sizeof(function));
   return function;
 }
@@ -92,14 +93,14 @@ static cef_set_scale_fn find_set_scale(void) {
   cef_set_scale_fn function = NULL;
   void *symbol = dlsym(RTLD_NEXT, "cef_set_force_device_scale_factor");
 
-  _Static_assert(
-      sizeof(function) == sizeof(symbol), "dlsym pointer size differs from a CEF function pointer");
+  _Static_assert(sizeof(function) == sizeof(symbol),
+                 "dlsym pointer size differs from a CEF function pointer");
   (void)memcpy(&function, &symbol, sizeof(function));
   return function;
 }
 
-int cef_initialize(
-    const void *args, const void *settings, void *application, void *windows_sandbox_info) {
+int cef_initialize(const void *args, const void *settings, void *application,
+                   void *windows_sandbox_info) {
   const cef_initialize_fn real_initialize = find_real_initialize();
   if (real_initialize == NULL) {
     warning_log("the real cef_initialize symbol is unavailable");
