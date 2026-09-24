@@ -1,9 +1,42 @@
 # steam-cef-scale-override
 
-An opt-in `LD_PRELOAD` interposer for the Steam desktop client's CEF UI. It
-calls Steam's exported `cef_set_force_device_scale_factor` immediately after a
-successful `cef_initialize`, allowing Steam to render sharp text while a
-Wayland compositor leaves XWayland buffers unscaled.
+[![OpenSSF Baseline: not assessed](https://img.shields.io/badge/OpenSSF%20Baseline-not%20assessed-lightgrey)](https://baseline.openssf.org/)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/IanHollow/steam-cef-scale-override/badge)](https://scorecard.dev/viewer/?uri=github.com/IanHollow/steam-cef-scale-override)
+[![OpenSSF Best Practices: not enrolled](https://img.shields.io/badge/OpenSSF%20Best%20Practices-not%20enrolled-lightgrey)](https://www.bestpractices.dev/)
+
+`steam-cef-scale-override` is a Linux library that adjusts the Steam desktop
+client's UI scale under Wayland/XWayland. It is an opt-in workaround for blurry
+text when the compositor leaves XWayland buffers unscaled.
+
+## Install and use
+
+On x86_64 Linux with Nix:
+
+```console
+nix build github:IanHollow/steam-cef-scale-override
+```
+
+The library is installed at `result/lib/libsteam-cef-scale-override.so`. Set
+`STEAM_SCALE_FACTOR` to a number between `0.25` and `8.0`, and add the library
+to the Steam launcher's `LD_PRELOAD` value so it reaches `steamwebhelper`. For
+example, a launcher can set:
+
+```sh
+STEAM_SCALE_FACTOR=1.5
+LD_PRELOAD="/path/to/libsteam-cef-scale-override.so${LD_PRELOAD:+:$LD_PRELOAD}"
+export STEAM_SCALE_FACTOR LD_PRELOAD
+```
+
+Keep any libraries already in `LD_PRELOAD`. The
+[`nixpkgs-personal`](https://github.com/nix-forge/nixpkgs-personal) package
+provides the same library from a pinned source revision. The
+[source releases](https://github.com/IanHollow/steam-cef-scale-override/releases)
+contain versioned source archives, not prebuilt libraries.
+
+## Scope and compatibility
+
+The interposer calls Steam's exported `cef_set_force_device_scale_factor` after
+a successful `cef_initialize` in `steamwebhelper`.
 
 The library is deliberately inert unless all of these conditions hold:
 
@@ -60,14 +93,10 @@ nix flake check
 
 ## Project health
 
-[![CI](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/ci.yml/badge.svg)](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/codeql.yml/badge.svg)](https://github.com/IanHollow/steam-cef-scale-override/actions/workflows/codeql.yml)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/IanHollow/steam-cef-scale-override/badge)](https://scorecard.dev/viewer/?uri=github.com/IanHollow/steam-cef-scale-override)
-
 Security and release expectations are documented in [SECURITY.md](SECURITY.md),
 [SUPPORT.md](SUPPORT.md), and [security and release process](docs/security-and-releases.md).
-The [source releases](https://github.com/IanHollow/steam-cef-scale-override/releases) provide
-versioned archives, checksums, and provenance. The first release is `v1.0.1`.
-There is no OSPS Baseline level or OpenSSF Best Practices passing
-claim for this repository. SLSA claims, if any, apply only to verified
-release archives, not to Nix builds or the whole repository.
+Releases provide checksums and provenance for the source archives. The first
+release is `v1.0.1`. The gray OpenSSF badges above indicate that this project
+has not been enrolled or assessed by the Best Practices service; they do not
+claim a Baseline level or a passing Best Practices status. SLSA claims, if any,
+apply only to verified release archives, not to Nix builds or the repository.
