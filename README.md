@@ -91,6 +91,12 @@ nix develop --command bash Scripts/check-quality.sh
 nix flake check
 ```
 
+The quality suite also runs 5,000 bounded, sanitizer-backed libFuzzer cases
+against the production scale parser. Seed inputs live in `fuzz/corpus/scale`;
+the run uses a temporary writable corpus and leaves no generated files in the
+checkout. Run `bash Scripts/check-fuzz.sh` separately for a focused check, or
+set `STEAM_CEF_FUZZ_RUNS` for a longer local campaign.
+
 ## Project health
 
 Security and release expectations are documented in [SECURITY.md](SECURITY.md),

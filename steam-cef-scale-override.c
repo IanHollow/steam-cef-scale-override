@@ -59,8 +59,7 @@ static bool is_steam_webhelper(void) {
   return strcmp(basename, "steamwebhelper") == 0;
 }
 
-static bool read_scale(double *scale) {
-  const char *value = getenv("STEAM_SCALE_FACTOR");
+static bool parse_scale(const char *value, double *scale) {
   char *remainder = NULL;
 
   if (value == NULL || value[0] == '\0') {
@@ -71,11 +70,22 @@ static bool read_scale(double *scale) {
   const double parsed = strtod(value, &remainder);
   if (errno == ERANGE || remainder == value || remainder == NULL || remainder[0] != '\0' ||
       !isfinite(parsed) || parsed < MINIMUM_SCALE || parsed > MAXIMUM_SCALE) {
-    warning_log("ignoring invalid STEAM_SCALE_FACTOR");
     return false;
   }
 
   *scale = parsed;
+  return true;
+}
+
+static bool read_scale(double *scale) {
+  const char *value = getenv("STEAM_SCALE_FACTOR");
+  if (value == NULL || value[0] == '\0') {
+    return false;
+  }
+  if (!parse_scale(value, scale)) {
+    warning_log("ignoring invalid STEAM_SCALE_FACTOR");
+    return false;
+  }
   return true;
 }
 
