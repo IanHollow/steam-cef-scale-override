@@ -1,8 +1,8 @@
 # steam-cef-scale-override
 
-[![OpenSSF Baseline: not assessed](https://img.shields.io/badge/OpenSSF%20Baseline-not%20assessed-lightgrey)](https://baseline.openssf.org/)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/14828/baseline)](https://www.bestpractices.dev/en/projects/14828/baseline-2)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/IanHollow/steam-cef-scale-override/badge)](https://scorecard.dev/viewer/?uri=github.com/IanHollow/steam-cef-scale-override)
-[![OpenSSF Best Practices: not enrolled](https://img.shields.io/badge/OpenSSF%20Best%20Practices-not%20enrolled-lightgrey)](https://www.bestpractices.dev/)
+[![OpenSSF Developer Best Practices](https://www.bestpractices.dev/projects/14828/badge)](https://www.bestpractices.dev/en/projects/14828/passing)
 
 `steam-cef-scale-override` is a Linux library that adjusts the Steam desktop
 client's UI scale under Wayland/XWayland. It is an opt-in workaround for blurry
